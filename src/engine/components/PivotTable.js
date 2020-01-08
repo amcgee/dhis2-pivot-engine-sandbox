@@ -66,13 +66,13 @@ export const PivotTable = ({ visualization, data, options }) => {
                 <tr>
                     <th colSpan={2} className="empty-header row-header"></th>
                     {clippedCols.pre ?
-                        <th className="col-header" key="pre" style={{ minWidth: clippedCols.pre }} /> : null
+                        <th className="col-header" style={{ minWidth: clippedCols.pre }} /> : null
                     }
                     {clippedCols.indices.map(idx =>
                         <th className="col-header" key={idx}>{columns[idx]}</th>
                     )}
                     {clippedCols.post ?
-                        <th className="col-header" key="post" style={{ minWidth: clippedCols.post }} /> : null
+                        <th className="col-header" style={{ minWidth: clippedCols.post }} /> : null
                     }
                 </tr>
             </thead>
