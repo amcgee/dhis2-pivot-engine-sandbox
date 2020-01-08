@@ -1,0 +1,213 @@
+{
+  "lastUpdated": "2020-01-03T16:38:31.148",
+  "id": "enC1bgdKYoP",
+  "created": "2020-01-03T16:38:31.148",
+  "name": "_PT_TEST_",
+  "publicAccess": "rw------",
+  "legendDisplayStyle": "FILL",
+  "hideEmptyColumns": false,
+  "subscribed": false,
+  "rowSubTotals": true,
+  "showDimensionLabels": false,
+  "sortOrder": 0,
+  "fontSize": "NORMAL",
+  "favorite": false,
+  "topLimit": 0,
+  "displayName": "_PT_TEST_",
+  "showHierarchy": false,
+  "cumulative": false,
+  "hideTitle": false,
+  "skipRounding": false,
+  "numberType": "VALUE",
+  "hideEmptyRows": false,
+  "parentGraphMap": {},
+  "displayDensity": "NORMAL",
+  "completedOnly": false,
+  "colTotals": true,
+  "aggregationType": "DEFAULT",
+  "hideSubtitle": false,
+  "legendDisplayStrategy": "FIXED",
+  "colSubTotals": true,
+  "rowTotals": true,
+  "digitGroupSeparator": "SPACE",
+  "regression": false,
+  "reportParams": {
+    "paramGrandParentOrganisationUnit": false,
+    "paramReportingPeriod": false,
+    "paramOrganisationUnit": false,
+    "paramParentOrganisationUnit": true
+  },
+  "access": {
+    "read": true,
+    "update": true,
+    "externalize": true,
+    "delete": true,
+    "write": true,
+    "manage": true
+  },
+  "lastUpdatedBy": { "id": "xE7jOejl9FI" },
+  "user": {
+    "displayName": "John Traore",
+    "userCredentials": { "username": "admin" }
+  },
+  "dataElementGroupSetDimensions": [],
+  "attributeDimensions": [],
+  "translations": [],
+  "interpretations": [],
+  "userGroupAccesses": [],
+  "subscribers": [],
+  "columns": [
+    {
+      "dimension": "dx",
+      "items": [
+        {
+          "id": "OdiHJayrsKo",
+          "name": "ANC 2 Coverage",
+          "dimensionItemType": "INDICATOR"
+        },
+        {
+          "id": "Q3M7Htpzg1Y",
+          "name": "PHU delivery rate (by expected pregnancies)",
+          "dimensionItemType": "INDICATOR"
+        },
+        {
+          "id": "puykO1tbcdi",
+          "name": "ANC TT2 coverage",
+          "dimensionItemType": "INDICATOR"
+        },
+        {
+          "id": "Tt5TAvdfdVK",
+          "name": "ANC LLITN coverage",
+          "dimensionItemType": "INDICATOR"
+        },
+        {
+          "id": "c8fABiNpT0B",
+          "name": "ANC IPT 2 Coverage",
+          "dimensionItemType": "INDICATOR"
+        },
+        {
+          "id": "elTqMUTRgdk",
+          "name": "Births attended by skilled health personnel (estimated pregancies)",
+          "dimensionItemType": "INDICATOR"
+        },
+        {
+          "id": "tcs5YGnjiKo",
+          "name": "Maternal death rate by registered live births",
+          "dimensionItemType": "INDICATOR"
+        },
+        {
+          "id": "GfYjGL16D0W",
+          "name": "NVP during labour rate",
+          "dimensionItemType": "INDICATOR"
+        }
+      ]
+    },
+    {
+      "dimension": "J5jldMd8OHv",
+      "items": [
+        {
+          "id": "uYxK4wmcPqA",
+          "name": "CHP",
+          "dimensionItemType": "ORGANISATION_UNIT_GROUP"
+        },
+        {
+          "id": "CXw2yu5fodb",
+          "name": "CHC",
+          "dimensionItemType": "ORGANISATION_UNIT_GROUP"
+        },
+        {
+          "id": "EYbopBOJWsW",
+          "name": "MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT_GROUP"
+        },
+        {
+          "id": "RXL3lPSK8oG",
+          "name": "Clinic",
+          "dimensionItemType": "ORGANISATION_UNIT_GROUP"
+        },
+        {
+          "id": "tDZVQ1WtwpA",
+          "name": "Hospital",
+          "dimensionItemType": "ORGANISATION_UNIT_GROUP"
+        }
+      ]
+    }
+  ],
+  "dataElementDimensions": [],
+  "categoryDimensions": [],
+  "programIndicatorDimensions": [],
+  "attributeValues": [],
+  "userAccesses": [],
+  "favorites": [],
+  "dataDimensionItems": [
+    {
+      "dataDimensionItemType": "INDICATOR",
+      "indicator": { "id": "OdiHJayrsKo" }
+    },
+    {
+      "dataDimensionItemType": "INDICATOR",
+      "indicator": { "id": "Q3M7Htpzg1Y" }
+    },
+    {
+      "dataDimensionItemType": "INDICATOR",
+      "indicator": { "id": "puykO1tbcdi" }
+    },
+    {
+      "dataDimensionItemType": "INDICATOR",
+      "indicator": { "id": "Tt5TAvdfdVK" }
+    },
+    {
+      "dataDimensionItemType": "INDICATOR",
+      "indicator": { "id": "c8fABiNpT0B" }
+    },
+    {
+      "dataDimensionItemType": "INDICATOR",
+      "indicator": { "id": "elTqMUTRgdk" }
+    },
+    {
+      "dataDimensionItemType": "INDICATOR",
+      "indicator": { "id": "tcs5YGnjiKo" }
+    },
+    {
+      "dataDimensionItemType": "INDICATOR",
+      "indicator": { "id": "GfYjGL16D0W" }
+    }
+  ],
+  "categoryOptionGroupSetDimensions": [],
+  "organisationUnitGroupSetDimensions": [
+    {
+      "organisationUnitGroupSet": { "id": "J5jldMd8OHv" },
+      "organisationUnitGroups": [
+        { "id": "uYxK4wmcPqA" },
+        { "id": "CXw2yu5fodb" },
+        { "id": "EYbopBOJWsW" },
+        { "id": "RXL3lPSK8oG" },
+        { "id": "tDZVQ1WtwpA" }
+      ]
+    }
+  ],
+  "filters": [],
+  "rows": [
+    {
+      "dimension": "pe",
+      "items": [
+        {
+          "id": "THIS_YEAR",
+          "name": "THIS_YEAR",
+          "dimensionItemType": "PERIOD"
+        },
+        {
+          "id": "LAST_4_QUARTERS",
+          "name": "LAST_4_QUARTERS",
+          "dimensionItemType": "PERIOD"
+        }
+      ]
+    },
+    {
+      "dimension": "ou",
+      "items": [
+        { "id": "USER_ORGUNIT_CHILDREN", "name": "USER_ORGUNIT_CHILDREN" }
+      ]
+    }
+  ]
+}
