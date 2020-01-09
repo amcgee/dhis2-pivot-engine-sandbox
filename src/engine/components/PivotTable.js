@@ -1,27 +1,11 @@
 import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react'
 
-import times from 'lodash/times'
 import debounce from 'lodash/debounce'
 
 import styles from './PivotTable.styles'
 import { LookupMap } from '../utils/LookupMap'
-
-const doClipping = (position, size, step, totalCount) => {
-    const count = Math.ceil(size / step)
-    const start = Math.min(totalCount - count, Math.floor(position / step))
-    const pre = start * step
-    const post = (totalCount - (start + count)) * step
-    const indices = times(
-        count,
-        n => start + n
-    )
-
-    return {
-        indices,
-        pre,
-        post
-    }
-}
+import { clipAxis } from '../utils/clipAxis'
+import { getHeaderForDisplay } from '../utils/getHeaderForDisplay'
 
 export const PivotTable = ({ visualization, data, options }) => {
     const container = useRef(undefined)
@@ -45,8 +29,8 @@ export const PivotTable = ({ visualization, data, options }) => {
         }
     }, [container])
 
-    const clippedRows = doClipping(scrollPosition.y, 600 - lookup.dimensionLookup.rows.length * 25, 25, lookup.height)
-    const clippedCols = doClipping(scrollPosition.x, 1200 - lookup.dimensionLookup.rows.length * 150, 150, lookup.width)
+    const clippedRows = clipAxis(scrollPosition.y, 600 - lookup.dimensionLookup.rows.length * 25, 25, lookup.height)
+    const clippedCols = clipAxis(scrollPosition.x, 1200 - lookup.dimensionLookup.rows.length * 150, 150, lookup.width)
 
     return <div className="pivot-table-container" ref={container}>
         <style jsx>{styles}</style>
@@ -58,20 +42,16 @@ export const PivotTable = ({ visualization, data, options }) => {
                         {clippedCols.pre ?
                             <th className="col-header" style={{ minWidth: clippedCols.pre }} /> : null
                         }
-                        {clippedCols.indices.map((idx, colNumber) => {
-                            const showHeader = idx % column.size === 0 || colNumber === 0;
-                            if (!showHeader) return null;
-
-                            const colCount = clippedCols.indices.length;
-                            const preClipCount = clippedCols.indices[0] % column.size;
-
-                            const colSpan = Math.min(colNumber === 0 ? column.size - preClipCount : column.size, colCount - colNumber)
-
-                            return <th className="col-header" colSpan={colSpan} key={idx}>{
-                                lookup.getColumnHeader(idx)[columnLevel]
-                                    ? lookup.getColumnHeader(idx)[columnLevel].name
-                                    : null
-                            }</th>
+                        {clippedCols.indices.map((index, clippedIndex) => {
+                            const header = getHeaderForDisplay({
+                                index,
+                                clippedIndex,
+                                clippedIndices: clippedCols.indices,
+                                dimension: column,
+                                dimensionLevel: columnLevel,
+                                getHeader: idx => lookup.getColumnHeader(idx)
+                            })
+                            return !header ? null : <th className="col-header" key={index} colSpan={header.span}>{header.name}</th>
                         })}
                         {clippedCols.post ?
                             <th className="col-header" style={{ minWidth: clippedCols.post }} /> : null
@@ -84,28 +64,23 @@ export const PivotTable = ({ visualization, data, options }) => {
                     <tr><td style={{ height: clippedRows.pre }} /></tr> : null
                 }
 
-                {clippedRows.indices.map((idx, rowNumber) =>
-                    <tr key={idx}>
+                {clippedRows.indices.map((index, clippedIndex) =>
+                    <tr key={index}>
                         {lookup.dimensionLookup.rows.map((row, rowLevel) => {
-                            const showHeader = idx % row.size === 0 || rowNumber === 0;
-                            if (!showHeader) return null;
-
-                            const rowCount = clippedRows.indices.length;
-                            const preClipCount = clippedRows.indices[0] % row.size;
-
-                            const rowSpan = Math.min(rowNumber === 0 ? row.size - preClipCount : row.size, rowCount - rowNumber)
-
-                            const header = lookup.getRowHeader(idx)[rowLevel]
-                            return <td className="row-header" rowSpan={rowSpan}>{
-                                header
-                                    ? header.name
-                                    : null
-                            }</td>
+                            const header = getHeaderForDisplay({
+                                index,
+                                clippedIndex,
+                                clippedIndices: clippedRows.indices,
+                                dimension: row,
+                                dimensionLevel: rowLevel,
+                                getHeader: idx => lookup.getRowHeader(idx)
+                            })
+                            return !header ? null : <td className="row-header" rowSpan={header.span}>{header.name}</td>
                         })}
                         {clippedCols.pre ? <td /> : null}
                         {
                             clippedCols.indices.map(col => {
-                                const dataRow = lookup.get({ row: idx, column: col })
+                                const dataRow = lookup.get({ row: index, column: col })
                                 return <td key={col}>{dataRow ? dataRow[4] : null}</td>
                             })
                         }
