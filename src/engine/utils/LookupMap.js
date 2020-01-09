@@ -95,13 +95,21 @@ const lookup = (dataRow, dimensionLookup) => {
 }
 
 export class LookupMap {
+    visualization
+    rawData
+    options
+
+    dimensionLookup
+
+    columnDepth = 0
+    rowDepth = 0
+
     height = 0
     width = 0
     data = []
     occupiedColumns = []
-
-    columnDepth = 0
-    rowDepth = 0
+    rowMap = []
+    columnMap = []
 
     constructor(visualization, data, options) {
         this.visualization = visualization
@@ -140,14 +148,14 @@ export class LookupMap {
 
     getColumnHeader(column) {
         return this.dimensionLookup.columns.map(dimension => {
-            const itemIndex = Math.floor(column / dimension.size) % dimension.count;
+            const itemIndex = Math.floor(this.columnMap[column] / dimension.size) % dimension.count;
             return dimension.items[itemIndex]
         })
     }
 
     getRowHeader(row) {
         return this.dimensionLookup.rows.map(dimension => {
-            const itemIndex = Math.floor(row / dimension.size) % dimension.count;
+            const itemIndex = Math.floor(this.rowMap[row] / dimension.size) % dimension.count;
             return dimension.items[itemIndex]
         })
     }
@@ -174,8 +182,6 @@ export class LookupMap {
         this.rowMap = this.options.hideEmptyRows
             ? times(rowCount, n => n).filter(idx => !!this.data[idx].length)
             : times(rowCount, n => n)
-
-        console.log(this.columnMap, this.rowMap, this.data)
 
         this.height = this.rowMap.length;
         this.width = this.columnMap.length;

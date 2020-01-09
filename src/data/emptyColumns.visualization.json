@@ -1,0 +1,338 @@
+{
+  "lastUpdated": "2017-05-30T09:48:15.638",
+  "id": "qq4OLR4GtgB",
+  "created": "2017-05-30T09:48:15.638",
+  "name": "HIV: HIV counselling at facility level (hide empty columns)",
+  "publicAccess": "rw------",
+  "legendDisplayStyle": "FILL",
+  "hideEmptyColumns": true,
+  "subscribed": false,
+  "rowSubTotals": true,
+  "displayDescription": "HIV counselling at facility level",
+  "showDimensionLabels": true,
+  "sortOrder": 0,
+  "fontSize": "NORMAL",
+  "favorite": false,
+  "topLimit": 0,
+  "displayName": "HIV: HIV counselling at facility level (hide empty columns)",
+  "showHierarchy": false,
+  "cumulative": false,
+  "hideTitle": false,
+  "skipRounding": false,
+  "numberType": "VALUE",
+  "hideEmptyRows": false,
+  "parentGraphMap": {
+    "agEKP19IUKI": "ImspTQPwCqd/fdc6uOvgoji/BXJdOLvUrZB",
+    "bSj2UnYhTFb": "ImspTQPwCqd/fdc6uOvgoji/e1eIKM1GIF3",
+    "ZxuSbAmsLCn": "ImspTQPwCqd/fdc6uOvgoji/fwH9ipvXde9",
+    "ObV5AR1NECl": "ImspTQPwCqd/fdc6uOvgoji/fwH9ipvXde9",
+    "Uwcj0mz78BV": "ImspTQPwCqd/fdc6uOvgoji/fwH9ipvXde9",
+    "tEgxbwwrwUd": "ImspTQPwCqd/fdc6uOvgoji/fwH9ipvXde9",
+    "OuwX8H2CcRO": "ImspTQPwCqd/fdc6uOvgoji/KKkLOTpMXGV",
+    "duGLGssecoD": "ImspTQPwCqd/fdc6uOvgoji/fwH9ipvXde9",
+    "UUgajyaViT7": "ImspTQPwCqd/fdc6uOvgoji/e1eIKM1GIF3",
+    "C1zlHePEQe6": "ImspTQPwCqd/fdc6uOvgoji/KKkLOTpMXGV",
+    "E7IDb3nNiW7": "ImspTQPwCqd/fdc6uOvgoji/KKkLOTpMXGV",
+    "z6v73gowbuM": "ImspTQPwCqd/fdc6uOvgoji/BXJdOLvUrZB",
+    "msH78gZ7Fe6": "ImspTQPwCqd/fdc6uOvgoji/e1eIKM1GIF3",
+    "uNEhNuBUr0i": "ImspTQPwCqd/fdc6uOvgoji/KKkLOTpMXGV",
+    "YAuJ3fyoEuI": "ImspTQPwCqd/fdc6uOvgoji/BXJdOLvUrZB",
+    "mt47bcb0Rcj": "ImspTQPwCqd/fdc6uOvgoji/fwH9ipvXde9",
+    "Dbn6fyCgMBV": "ImspTQPwCqd/fdc6uOvgoji/KKkLOTpMXGV",
+    "GQcsUZf81vP": "ImspTQPwCqd/fdc6uOvgoji/KKkLOTpMXGV",
+    "d9uZeZ5fMUo": "ImspTQPwCqd/fdc6uOvgoji/BXJdOLvUrZB",
+    "I48Qu6R0sGm": "ImspTQPwCqd/fdc6uOvgoji/BXJdOLvUrZB",
+    "mepHuAA9l51": "ImspTQPwCqd/fdc6uOvgoji/KKkLOTpMXGV",
+    "OI0BQUurVFS": "ImspTQPwCqd/fdc6uOvgoji/fwH9ipvXde9",
+    "cgqkFdShPzg": "ImspTQPwCqd/fdc6uOvgoji/KKkLOTpMXGV",
+    "BXJnMD2eJAx": "ImspTQPwCqd/fdc6uOvgoji/e1eIKM1GIF3",
+    "LZclRdyVk1t": "ImspTQPwCqd/fdc6uOvgoji/fwH9ipvXde9",
+    "XzmWizbR343": "ImspTQPwCqd/fdc6uOvgoji/KKkLOTpMXGV",
+    "cZZG5BMDLps": "ImspTQPwCqd/fdc6uOvgoji/e1eIKM1GIF3",
+    "wNYYRm2c9EK": "ImspTQPwCqd/fdc6uOvgoji/KKkLOTpMXGV",
+    "uedNhvYPMNu": "ImspTQPwCqd/fdc6uOvgoji/e1eIKM1GIF3",
+    "wzvDhS0TkAF": "ImspTQPwCqd/fdc6uOvgoji/KKkLOTpMXGV",
+    "gP6hn503KUX": "ImspTQPwCqd/fdc6uOvgoji/KKkLOTpMXGV",
+    "QFcMulIoEii": "ImspTQPwCqd/fdc6uOvgoji/e1eIKM1GIF3",
+    "nDwbwJZQUYU": "ImspTQPwCqd/fdc6uOvgoji/fwH9ipvXde9",
+    "qEQFWnKh4gs": "ImspTQPwCqd/fdc6uOvgoji/BXJdOLvUrZB",
+    "dqHvtpUqLwB": "ImspTQPwCqd/fdc6uOvgoji/KKkLOTpMXGV",
+    "OjTS752GbZE": "ImspTQPwCqd/fdc6uOvgoji/fwH9ipvXde9",
+    "PybxeRWVSrI": "ImspTQPwCqd/fdc6uOvgoji/KKkLOTpMXGV",
+    "ewh5SKxcCAl": "ImspTQPwCqd/fdc6uOvgoji/e1eIKM1GIF3",
+    "aQoqXL4cZaF": "ImspTQPwCqd/fdc6uOvgoji/KKkLOTpMXGV"
+  },
+  "displayDensity": "NORMAL",
+  "completedOnly": false,
+  "colTotals": true,
+  "aggregationType": "DEFAULT",
+  "hideSubtitle": false,
+  "description": "HIV counselling at facility level",
+  "legendDisplayStrategy": "FIXED",
+  "colSubTotals": true,
+  "rowTotals": true,
+  "digitGroupSeparator": "SPACE",
+  "regression": false,
+  "reportParams": {
+    "paramGrandParentOrganisationUnit": false,
+    "paramReportingPeriod": false,
+    "paramOrganisationUnit": false,
+    "paramParentOrganisationUnit": false
+  },
+  "access": {
+    "read": true,
+    "update": true,
+    "externalize": true,
+    "delete": true,
+    "write": true,
+    "manage": true
+  },
+  "lastUpdatedBy": { "id": "GOLswS44mh8" },
+  "user": {
+    "displayName": "Tom Wakiki",
+    "userCredentials": { "username": "system" }
+  },
+  "dataElementGroupSetDimensions": [],
+  "attributeDimensions": [],
+  "translations": [],
+  "interpretations": [],
+  "userGroupAccesses": [],
+  "columns": [
+    {
+      "dimension": "ou",
+      "items": [
+        {
+          "id": "YAuJ3fyoEuI",
+          "name": "Gbendembu Wesleyan CHC",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "d9uZeZ5fMUo",
+          "name": "Mamaka MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "I48Qu6R0sGm",
+          "name": "Madina Loko CHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "qEQFWnKh4gs",
+          "name": "Maharie MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "agEKP19IUKI",
+          "name": "Tambiama CHC",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "z6v73gowbuM",
+          "name": "Kortohun CHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "UUgajyaViT7",
+          "name": "Kambia CHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "msH78gZ7Fe6",
+          "name": "Royeama CHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "BXJnMD2eJAx",
+          "name": "Gbonkobana CHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "cZZG5BMDLps",
+          "name": "Borongoh Makarankay CHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "uedNhvYPMNu",
+          "name": "Gbanti CHC",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "QFcMulIoEii",
+          "name": "Gbainkfay MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "ewh5SKxcCAl",
+          "name": "Makaiba MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "bSj2UnYhTFb",
+          "name": "Kamaranka CHC",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "ObV5AR1NECl",
+          "name": "Karina MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "Uwcj0mz78BV",
+          "name": "Manjoro MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "tEgxbwwrwUd",
+          "name": "Kayongoro MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "duGLGssecoD",
+          "name": "Kagbaneh CHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "mt47bcb0Rcj",
+          "name": "Kamabai CHC",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "OI0BQUurVFS",
+          "name": "Bumban MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "LZclRdyVk1t",
+          "name": "Bumbanday MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "nDwbwJZQUYU",
+          "name": "Kanikay MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "OjTS752GbZE",
+          "name": "Kagbankona MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "ZxuSbAmsLCn",
+          "name": "Kamasikie MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "C1zlHePEQe6",
+          "name": "Maforay (B. Sebora) MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "E7IDb3nNiW7",
+          "name": "Makump Bana MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "uNEhNuBUr0i",
+          "name": "Tonko Maternity Clinic",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "Dbn6fyCgMBV",
+          "name": "Makama MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "GQcsUZf81vP",
+          "name": "Govt. Hosp. Makeni",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "mepHuAA9l51",
+          "name": "Rokonta CHC",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "cgqkFdShPzg",
+          "name": "Loreto Clinic",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "XzmWizbR343",
+          "name": "Masuba MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "wNYYRm2c9EK",
+          "name": "Red Cross Clinic",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "wzvDhS0TkAF",
+          "name": "Pate Bana CHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "gP6hn503KUX",
+          "name": "Robat MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "dqHvtpUqLwB",
+          "name": "Masory MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "PybxeRWVSrI",
+          "name": "Mabolleh MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "aQoqXL4cZaF",
+          "name": "Fullah Town (B.Sebora) MCHP",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        },
+        {
+          "id": "OuwX8H2CcRO",
+          "name": "Teko Barracks Clinic",
+          "dimensionItemType": "ORGANISATION_UNIT"
+        }
+      ]
+    }
+  ],
+  "dataElementDimensions": [],
+  "categoryDimensions": [],
+  "programIndicatorDimensions": [],
+  "attributeValues": [],
+  "userAccesses": [],
+  "dataDimensionItems": [
+    {
+      "dataDimensionItemType": "DATA_ELEMENT",
+      "dataElement": { "id": "o0fOD1HLuv8" }
+    }
+  ],
+  "categoryOptionGroupSetDimensions": [],
+  "organisationUnitGroupSetDimensions": [],
+  "filters": [],
+  "rows": [
+    {
+      "dimension": "dx",
+      "items": [
+        {
+          "id": "o0fOD1HLuv8",
+          "name": "HIV: counseling",
+          "dimensionItemType": "DATA_ELEMENT"
+        }
+      ]
+    },
+    {
+      "dimension": "pe",
+      "items": [
+        {
+          "id": "LAST_12_MONTHS",
+          "name": "LAST_12_MONTHS",
+          "dimensionItemType": "PERIOD"
+        }
+      ]
+    }
+  ]
+}

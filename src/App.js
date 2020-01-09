@@ -1,13 +1,14 @@
 import React from 'react'
 import { PivotTable } from './engine'
 
-import data from './testData.json'
-import visualization from './testVisualization.json'
+// zLlhKD36wC5
+import data from './data/emptyRows.data.json'
+import visualization from './data/emptyRows.visualization.json'
 
 const invert = false
 const options = {
-    hideEmptyRows: true,
-    hideEmptyColumns: true
+    hideEmptyRows: false,
+    hideEmptyColumns: false
 }
 
 if (invert) {

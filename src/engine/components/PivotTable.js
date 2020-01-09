@@ -11,16 +11,17 @@ export const PivotTable = ({ visualization, data, options }) => {
     const scrollPosition = useScrollPosition(container)
 
     const lookup = useMemo(() => new LookupMap(visualization, data, options), [visualization, data, options])
+    console.log(lookup)
 
-    const clippedRows = clipAxis(scrollPosition.y, 600 - lookup.dimensionLookup.rows.length * 25, 25, lookup.height)
-    const clippedCols = clipAxis(scrollPosition.x, 1200 - lookup.dimensionLookup.rows.length * 150, 150, lookup.width)
+    const clippedRows = clipAxis(scrollPosition.y, 600, 25, lookup.height)
+    const clippedCols = clipAxis(scrollPosition.x, 1200, 150, lookup.width)
 
     return <div className="pivot-table-container" ref={container}>
         <style jsx>{styles}</style>
         <table>
             <thead>
                 {lookup.dimensionLookup.columns.map((_, columnLevel) =>
-                    <tr>
+                    <tr key={columnLevel}>
                         <th colSpan={lookup.rowDepth} className="empty-header row-header"></th>
                         {clippedCols.pre ?
                             <th className="col-header" style={{ minWidth: clippedCols.pre }} /> : null
@@ -33,7 +34,7 @@ export const PivotTable = ({ visualization, data, options }) => {
                                 dimensionLevel: columnLevel,
                                 getHeader: idx => lookup.getColumnHeader(idx)
                             })
-                            return !header ? null : <th className="col-header" key={index} colSpan={header.span}>{header.name}</th>
+                            return !header ? null : <th key={index} className="col-header" colSpan={header.span}>{header.name}</th>
                         })}
                         {clippedCols.post ?
                             <th className="col-header" style={{ minWidth: clippedCols.post }} /> : null
@@ -42,9 +43,7 @@ export const PivotTable = ({ visualization, data, options }) => {
                 )}
             </thead>
             <tbody>
-                {clippedRows.pre ?
-                    <tr><td style={{ height: clippedRows.pre }} /></tr> : null
-                }
+                {clippedRows.pre ? <tr><td style={{ height: clippedRows.pre }} /></tr> : null}
 
                 {clippedRows.indices.map(index =>
                     <tr key={index}>
@@ -56,7 +55,7 @@ export const PivotTable = ({ visualization, data, options }) => {
                                 dimensionLevel: rowLevel,
                                 getHeader: idx => lookup.getRowHeader(idx)
                             })
-                            return !header ? null : <td className="row-header" rowSpan={header.span}>{header.name}</td>
+                            return !header ? null : <td key={rowLevel} className="row-header" rowSpan={header.span}>{header.name}</td>
                         })}
                         {clippedCols.pre ? <td /> : null}
                         {
@@ -69,9 +68,7 @@ export const PivotTable = ({ visualization, data, options }) => {
                     </tr>
                 )}
 
-                {clippedRows.post ?
-                    <tr><td style={{ height: clippedRows.post }} /></tr> : null
-                }
+                {clippedRows.post ? <tr><td style={{ height: clippedRows.post }} /></tr> : null}
             </tbody>
         </table>
     </div>

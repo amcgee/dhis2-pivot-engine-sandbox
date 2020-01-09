@@ -2,6 +2,7 @@ import css from 'styled-jsx/css'
 
 export default css`
     div.pivot-table-container {
+        position: relative;
         max-width: 1200px;
         height: 600px;
         overflow: auto;
@@ -26,7 +27,6 @@ export default css`
         background-color: rgba(0, 0, 0, .5);
     }
     table {
-        position: relative;
         border-spacing: 0;
         border-collapse: collapse;
         white-space: nowrap;
