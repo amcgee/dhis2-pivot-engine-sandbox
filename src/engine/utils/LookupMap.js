@@ -1,3 +1,4 @@
+import React from 'react'
 import times from "lodash/times";
 
 const dataFields = ['value', 'numerator', 'denominator', 'factor', 'multiplier', 'divisor']
@@ -79,7 +80,7 @@ const buildDimensionLookup = (visualization, metadata, headers) => {
     }
 }
 
-const lookup = (dataRow, dimensionLookup) => {
+const lookup = (dataRow, dimensionLookup, options) => {
     let row = 0;
     dimensionLookup.rowHeaders.forEach(headerIndex => {
         const idx = dimensionLookup.headerDimensions[headerIndex].itemIds.indexOf(dataRow[headerIndex])
@@ -87,12 +88,20 @@ const lookup = (dataRow, dimensionLookup) => {
         row += idx * size
     })
 
+    if (options.showRowSubtotals) {
+        row += Math.floor(row / dimensionLookup.rows[0].size)
+    }
+
     let column = 0;
     dimensionLookup.columnHeaders.forEach(headerIndex => {
         const idx = dimensionLookup.headerDimensions[headerIndex].itemIds.indexOf(dataRow[headerIndex])
         const size = dimensionLookup.headerDimensions[headerIndex].size
         column += idx * size
     })
+
+    if (options.showColumnSubtotals) {
+        column += Math.floor(column / dimensionLookup.columns[0].size)
+    }
 
     return { column, row }
 }
@@ -152,15 +161,35 @@ export class LookupMap {
     }
 
     getColumnHeader(column) {
+        column = this.columnMap[column]
+        if (this.options.showColumnTotals && column === this.width - 1) {
+            return times(this.dimensionLookup.columns.length - 1, () => undefined).concat([{ name: 'TOTAL' }])
+        }
+        if (this.options.showColumnSubtotals) {
+            if ((column + 1) % (this.dimensionLookup.columns[0].size + 1) === 0) {
+                return []
+            }
+            column -= Math.floor(column / (this.dimensionLookup.columns[0].size + 1))
+        }
         return this.dimensionLookup.columns.map(dimension => {
-            const itemIndex = Math.floor(this.columnMap[column] / dimension.size) % dimension.count;
+            let itemIndex = Math.floor(column / dimension.size) % dimension.count;
             return dimension.items[itemIndex]
         })
     }
 
     getRowHeader(row) {
+        row = this.rowMap[row]
+        if (this.options.showRowTotals && row === this.height - 1) {
+            return times(this.dimensionLookup.rows.length - 1, () => undefined).concat([{ name: 'TOTAL' }])
+        }
+        if (this.options.showRowSubtotals) {
+            if ((row + 1) % (this.dimensionLookup.rows[0].size + 1) === 0) {
+                return []
+            }
+            row -= Math.floor(row / (this.dimensionLookup.rows[0].size + 1))
+        }
         return this.dimensionLookup.rows.map(dimension => {
-            const itemIndex = Math.floor(this.rowMap[row] / dimension.size) % dimension.count;
+            let itemIndex = Math.floor(row / dimension.size) % dimension.count;
             return dimension.items[itemIndex]
         })
     }
@@ -169,23 +198,70 @@ export class LookupMap {
         this.data = []
         this.occupiedColumns = []
 
-        const rowCount = countFromDisaggregates(this.dimensionLookup.rows)
-        const columnCount = countFromDisaggregates(this.dimensionLookup.columns)
-        for (let row = 0; row < rowCount; ++row) {
-            this.data[row] = [];
+        let rowCount = countFromDisaggregates(this.dimensionLookup.rows)
+        let columnCount = countFromDisaggregates(this.dimensionLookup.columns)
+
+        if (this.options.showRowSubtotals) {
+            rowCount += this.dimensionLookup.rows[0].count
+        }
+        if (this.options.showColumnSubtotals) {
+            columnCount += this.dimensionLookup.columns[0].count
+        }
+        if (this.options.showRowTotals) {
+            rowCount += 1;
+        }
+        if (this.options.showColumnTotals) {
+            columnCount += 1;
         }
 
         this.rawData.rows.forEach(dataRow => {
-            const pos = lookup(dataRow, this.dimensionLookup)
+            const pos = lookup(dataRow, this.dimensionLookup, this.options)
+            this.data[pos.row] = this.data[pos.row] || []
             this.data[pos.row][pos.column] = dataRow
             this.occupiedColumns[pos.column] = true
         })
+
+        if (this.options.showColumnSubtotals) {
+            times(this.dimensionLookup.rows[0].count, row => {
+                row = (row + 1) * (this.dimensionLookup.rows[0].size + 1) - 1
+                times(columnCount - (this.options.showRowTotals ? 1 : 0), column => {
+                    if (!this.occupiedColumns[column]) return;
+                    this.data[row][column] = times(8, () => <strong>ST</strong>) //TODO: Actually calculate sub-totals
+                })
+            })
+        }
+
+        if (this.options.showRowSubtotals) {
+            times(this.dimensionLookup.columns[0].count, column => {
+                column = (column + 1) * (this.dimensionLookup.columns[0].size + 1) - 1
+                times(rowCount - (this.options.showColumnTotals ? 1 : 0), row => {
+                    if (!this.data[row]) return;
+                    this.data[row][column] = times(8, () => <strong>ST</strong>) //TODO: Actually calculate sub-totals
+                })
+            })
+        }
+
+        if (this.options.showColumnTotals) {
+            this.data[rowCount - 1] = this.data[rowCount - 1] || []
+            times(columnCount, column => {
+                if (!this.occupiedColumns[column]) return;
+                this.data[rowCount - 1][column] = times(8, () => <strong>TOTAL</strong>) //TODO: Actually calculate totals
+            })
+        }
+
+        if (this.options.showRowTotals) {
+            this.occupiedColumns[columnCount - 1] = true
+            times(rowCount, row => {
+                if (!this.data[row]) return;
+                this.data[row][columnCount - 1] = times(8, () => <strong>TOTAL</strong>) //TODO: Actually calculate totals
+            })
+        }
 
         this.columnMap = this.options.hideEmptyColumns
             ? times(columnCount, n => n).filter(idx => !!this.occupiedColumns[idx])
             : times(columnCount, n => n)
         this.rowMap = this.options.hideEmptyRows
-            ? times(rowCount, n => n).filter(idx => !!this.data[idx].length)
+            ? times(rowCount, n => n).filter(idx => !!this.data[idx])
             : times(rowCount, n => n)
 
         this.height = this.rowMap.length;
