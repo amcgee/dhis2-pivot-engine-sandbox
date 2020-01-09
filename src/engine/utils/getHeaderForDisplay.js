@@ -1,18 +1,33 @@
+const headerStacksAreEqual = (a, b, limit) => {
+    for (let i = 0; i <= limit; ++i) {
+        if (a[i] !== b[i]) {
+            return false
+        }
+    }
+    return true;
+}
+
 export const getHeaderForDisplay = ({
-    index, clippedIndices, clippedIndex, dimension, dimensionLevel, getHeader
+    start, count, index, dimensionLevel, getHeader
 }) => {
-    const showHeader = index % dimension.size === 0 || clippedIndex === 0;
-    if (!showHeader) return null;
+    const header = getHeader(index)
+    const showHeader = index === start || !headerStacksAreEqual(header, getHeader(index - 1), dimensionLevel);
+    if (!showHeader) {
+        return null;
+    }
 
-    const count = clippedIndices.length;
-    const preClipCount = clippedIndices[0] % dimension.size;
+    let span = 1;
+    for (let i = index + 1; i < start + count; ++i) {
+        if (!headerStacksAreEqual(getHeader(i), header, dimensionLevel)) {
+            break;
+        }
+        ++span
+    }
 
-    const span = Math.min(clippedIndex === 0 ? dimension.size - preClipCount : dimension.size, count - clippedIndex)
-
-    const header = getHeader(index)[dimensionLevel]
+    const currentHeader = header[dimensionLevel]
 
     return {
         span,
-        name: header ? header.name : null,
+        name: currentHeader ? currentHeader.name : null,
     }
 }

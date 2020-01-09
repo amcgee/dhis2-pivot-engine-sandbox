@@ -1,3 +1,9 @@
+import times from "lodash/times";
+
+const defaultOptions = {
+    hideEmptyColumns: false,
+    hideEmptyRows: false
+}
 
 const countFromDisaggregates = list => {
     if (list.length === 0) {
@@ -97,14 +103,15 @@ export class LookupMap {
     columnDepth = 0
     rowDepth = 0
 
-    constructor(visualization, data) {
+    constructor(visualization, data, options) {
         this.visualization = visualization
         this.rawData = data
+        this.options = {
+            ...defaultOptions,
+            ...options
+        }
 
         this.dimensionLookup = buildDimensionLookup(this.visualization, this.rawData.metaData, this.rawData.headers)
-
-        this.height = countFromDisaggregates(this.dimensionLookup.rows)
-        this.width = countFromDisaggregates(this.dimensionLookup.columns)
 
         this.columnDepth = this.dimensionLookup.columns.length;
         this.rowDepth = this.dimensionLookup.rows.length;
@@ -113,13 +120,15 @@ export class LookupMap {
     }
 
     get({ row, column }) {
-        if (this.data[row]) {
-            return this.data[row][column]
+        const mappedRow = this.rowMap[row],
+            mappedColumn = this.columnMap[column]
+        if (!mappedRow && mappedRow !== 0 || !mappedColumn && mappedColumn !== 0) {
+            return undefined
+        }
+        if (this.data[mappedRow]) {
+            return this.data[mappedRow][mappedColumn]
         }
         return undefined
-    }
-    reverseLookup(dataRow) {
-        return lookup(dataRow, this.dimensionLookup)
     }
 
     rowIsEmpty(row) {
@@ -146,14 +155,29 @@ export class LookupMap {
     buildMatrix() {
         this.data = []
         this.occupiedColumns = []
-        for (let row = 0; row < this.height; ++row) {
+
+        const rowCount = countFromDisaggregates(this.dimensionLookup.rows)
+        const columnCount = countFromDisaggregates(this.dimensionLookup.columns)
+        for (let row = 0; row < rowCount; ++row) {
             this.data[row] = [];
         }
 
         this.rawData.rows.forEach(dataRow => {
-            const pos = this.reverseLookup(dataRow)
+            const pos = lookup(dataRow, this.dimensionLookup)
             this.data[pos.row][pos.column] = dataRow
             this.occupiedColumns[pos.column] = true
         })
+
+        this.columnMap = this.options.hideEmptyColumns
+            ? times(columnCount, n => n).filter(idx => !!this.occupiedColumns[idx])
+            : times(columnCount, n => n)
+        this.rowMap = this.options.hideEmptyRows
+            ? times(rowCount, n => n).filter(idx => !!this.data[idx].length)
+            : times(rowCount, n => n)
+
+        console.log(this.columnMap, this.rowMap, this.data)
+
+        this.height = this.rowMap.length;
+        this.width = this.columnMap.length;
     }
 }

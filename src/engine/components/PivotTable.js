@@ -11,7 +11,7 @@ export const PivotTable = ({ visualization, data, options }) => {
     const container = useRef(undefined)
     const [scrollPosition, setScrollPosition] = useState({ x: 0, y: 0 })
 
-    const lookup = useMemo(() => new LookupMap(visualization, data), [visualization, data])
+    const lookup = useMemo(() => new LookupMap(visualization, data, options), [visualization, data, options])
 
     const onScroll = useCallback(debounce(() => {
         const scroll = { x: container.current.scrollLeft, y: container.current.scrollTop }
@@ -42,12 +42,11 @@ export const PivotTable = ({ visualization, data, options }) => {
                         {clippedCols.pre ?
                             <th className="col-header" style={{ minWidth: clippedCols.pre }} /> : null
                         }
-                        {clippedCols.indices.map((index, clippedIndex) => {
+                        {clippedCols.indices.map(index => {
                             const header = getHeaderForDisplay({
+                                start: clippedCols.indices[0],
+                                count: clippedCols.indices.length,
                                 index,
-                                clippedIndex,
-                                clippedIndices: clippedCols.indices,
-                                dimension: column,
                                 dimensionLevel: columnLevel,
                                 getHeader: idx => lookup.getColumnHeader(idx)
                             })
@@ -64,14 +63,13 @@ export const PivotTable = ({ visualization, data, options }) => {
                     <tr><td style={{ height: clippedRows.pre }} /></tr> : null
                 }
 
-                {clippedRows.indices.map((index, clippedIndex) =>
+                {clippedRows.indices.map(index =>
                     <tr key={index}>
-                        {lookup.dimensionLookup.rows.map((row, rowLevel) => {
+                        {lookup.dimensionLookup.rows.map((_, rowLevel) => {
                             const header = getHeaderForDisplay({
+                                start: clippedRows.indices[0],
+                                count: clippedRows.indices.length,
                                 index,
-                                clippedIndex,
-                                clippedIndices: clippedRows.indices,
-                                dimension: row,
                                 dimensionLevel: rowLevel,
                                 getHeader: idx => lookup.getRowHeader(idx)
                             })
