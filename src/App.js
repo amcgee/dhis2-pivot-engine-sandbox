@@ -1,35 +1,19 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { PivotTable } from './engine'
-import { LookupMap } from './engine/utils/LookupMap'
 
 import data from './testData.json'
 import visualization from './testVisualization.json'
-import times from 'lodash/times'
 
 const invert = false
-const hideEmptyRows = true;
-const hideEmptyColumns = true;
+const options = {
+    hideEmptyRows: true,
+    hideEmptyColumns: true
+}
 
 if (invert) {
     const oldRows = visualization.rows;
     visualization.rows = visualization.columns;
     visualization.columns = oldRows;
-}
-
-const Value = ({ lookup, pos }) => {
-    const data = lookup.get(pos)
-    if (!data) return <td style={{ border: '1px solid black' }} />
-    return <td style={{ border: '1px solid black' }}>{data[4]}</td>
-}
-const DataTable = () => {
-    const lookup = useMemo(() => new LookupMap(visualization, data))
-    return <table>
-        <tbody>
-            {times(lookup.height, row => hideEmptyRows && lookup.rowIsEmpty(row) ? null : <tr key={row}>
-                {times(lookup.width, column => hideEmptyColumns && lookup.columnIsEmpty(column) ? null : <Value key={column} lookup={lookup} pos={{ row, column }} />)}
-            </tr>)}
-        </tbody>
-    </table>
 }
 
 const MyApp = () => (
@@ -48,8 +32,7 @@ const MyApp = () => (
                 font-size: 1rem;
             }
         }`}</style>
-        {/* <DataTable /> */}
-        <PivotTable visualization={visualization} data={data} />
+        <PivotTable visualization={visualization} data={data} options={options} />
     </div>
 )
 
