@@ -2,8 +2,8 @@ import React from 'react'
 import { PivotTable } from './engine'
 
 // zLlhKD36wC5
-import data from './data/emptyRows.data.json'
-import visualization from './data/emptyRows.visualization.json'
+import data from './data/deep.data.json'
+import visualization from './data/deep.visualization.json'
 
 const invert = false
 const options = {

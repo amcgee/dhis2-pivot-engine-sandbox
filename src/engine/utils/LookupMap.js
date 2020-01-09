@@ -1,9 +1,6 @@
 import times from "lodash/times";
 
-const defaultOptions = {
-    hideEmptyColumns: false,
-    hideEmptyRows: false
-}
+const dataFields = ['value', 'numerator', 'denominator', 'factor', 'multiplier', 'divisor']
 
 const countFromDisaggregates = list => {
     if (list.length === 0) {
@@ -66,13 +63,19 @@ const buildDimensionLookup = (visualization, metadata, headers) => {
         .map((_, idx) => idx)
         .filter(idx => headerDimensions[idx] && headerDimensions[idx].position === 'column')
 
+    const dataHeaders = dataFields.reduce((out, field) => {
+        out[field] = headers.findIndex(header => header.name === field)
+        return out;
+    }, {})
+
     return {
         rows,
         columns,
         allByDimension,
         headerDimensions,
         rowHeaders,
-        columnHeaders
+        columnHeaders,
+        dataHeaders
     }
 }
 
@@ -111,13 +114,10 @@ export class LookupMap {
     rowMap = []
     columnMap = []
 
-    constructor(visualization, data, options) {
+    constructor(visualization, data, options = {}) {
         this.visualization = visualization
         this.rawData = data
-        this.options = {
-            ...defaultOptions,
-            ...options
-        }
+        this.options = options
 
         this.dimensionLookup = buildDimensionLookup(this.visualization, this.rawData.metaData, this.rawData.headers)
 
@@ -127,14 +127,19 @@ export class LookupMap {
         this.buildMatrix()
     }
 
-    get({ row, column }) {
+    get({ row, column, field }) {
         const mappedRow = this.rowMap[row],
             mappedColumn = this.columnMap[column]
         if (!mappedRow && mappedRow !== 0 || !mappedColumn && mappedColumn !== 0) {
             return undefined
         }
         if (this.data[mappedRow]) {
-            return this.data[mappedRow][mappedColumn]
+            const dataRow = this.data[mappedRow][mappedColumn]
+            if (!field) {
+                return dataRow
+            } else if (dataRow && this.dimensionLookup.dataHeaders[field]) {
+                return dataRow[this.dimensionLookup.dataHeaders[field]]
+            }
         }
         return undefined
     }

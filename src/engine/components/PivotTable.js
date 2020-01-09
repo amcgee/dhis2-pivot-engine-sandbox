@@ -60,8 +60,8 @@ export const PivotTable = ({ visualization, data, options }) => {
                         {clippedCols.pre ? <td /> : null}
                         {
                             clippedCols.indices.map(col => {
-                                const dataRow = lookup.get({ row: index, column: col })
-                                return <td key={col}>{dataRow ? dataRow[4] : null}</td>
+                                const value = lookup.get({ row: index, column: col, field: 'value' })
+                                return <td key={col}>{value || null}</td>
                             })
                         }
                         {clippedCols.post ? <td /> : null}
