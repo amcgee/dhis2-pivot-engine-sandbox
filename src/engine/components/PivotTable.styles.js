@@ -6,6 +6,7 @@ export default css`
         height: 600px;
         overflow: auto;
         border: 1px solid #b2b2b2;
+        font-size: 10px;
     }
     div.pivot-table-container::-webkit-scrollbar {
         -webkit-appearance: none;
@@ -29,6 +30,8 @@ export default css`
         border-spacing: 0;
         border-collapse: collapse;
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         box-sizing: border-box;
         text-align: center;
     }
@@ -42,11 +45,13 @@ export default css`
         border-right: 0;
     }
     td, th {
-        padding: 8px;
+        padding: 5px;
         border: 1px solid #b2b2b2;
         min-width: 150px;
-        /* max-width: 150px; */
+        width: 150px;
+        max-width: 150px;
         min-height: 25px;
+        height: 25px;
         /* max-height: 25px; */
     }
     th {

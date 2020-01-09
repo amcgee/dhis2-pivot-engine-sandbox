@@ -11,11 +11,11 @@ const countFromDisaggregates = list => {
     return count
 }
 
-const addLookupFactors = list => {
+const addSize = list => {
     const reversedList = list.slice().reverse()
     reversedList.forEach((level, idx) => { // Start at the "leaf" disaggregate
         const lastLevel = reversedList[idx - 1]
-        level.lookupFactor = lastLevel ? lastLevel.count * lastLevel.lookupFactor : 1
+        level.size = lastLevel ? lastLevel.count * lastLevel.size : 1
     })
 }
 
@@ -41,8 +41,8 @@ const buildDimensionLookup = (visualization, metadata, headers) => {
         position: 'column'
     }))
 
-    addLookupFactors(rows)
-    addLookupFactors(columns)
+    addSize(rows)
+    addSize(columns)
 
     const allByDimension = {
         ...listByDimension(rows),
@@ -74,15 +74,15 @@ const lookup = (dataRow, dimensionLookup) => {
     let row = 0;
     dimensionLookup.rowHeaders.forEach(headerIndex => {
         const idx = dimensionLookup.headerDimensions[headerIndex].itemIds.indexOf(dataRow[headerIndex])
-        const factor = dimensionLookup.headerDimensions[headerIndex].lookupFactor
-        row += idx * factor
+        const size = dimensionLookup.headerDimensions[headerIndex].size
+        row += idx * size
     })
 
     let column = 0;
     dimensionLookup.columnHeaders.forEach(headerIndex => {
         const idx = dimensionLookup.headerDimensions[headerIndex].itemIds.indexOf(dataRow[headerIndex])
-        const factor = dimensionLookup.headerDimensions[headerIndex].lookupFactor
-        column += idx * factor
+        const size = dimensionLookup.headerDimensions[headerIndex].size
+        column += idx * size
     })
 
     return { column, row }
@@ -94,6 +94,9 @@ export class LookupMap {
     data = []
     occupiedColumns = []
 
+    columnDepth = 0
+    rowDepth = 0
+
     constructor(visualization, data) {
         this.visualization = visualization
         this.rawData = data
@@ -102,6 +105,9 @@ export class LookupMap {
 
         this.height = countFromDisaggregates(this.dimensionLookup.rows)
         this.width = countFromDisaggregates(this.dimensionLookup.columns)
+
+        this.columnDepth = this.dimensionLookup.columns.length;
+        this.rowDepth = this.dimensionLookup.rows.length;
 
         this.buildMatrix()
     }
@@ -121,6 +127,20 @@ export class LookupMap {
     }
     columnIsEmpty(column) {
         return !this.occupiedColumns[column]
+    }
+
+    getColumnHeader(column) {
+        return this.dimensionLookup.columns.map(dimension => {
+            const itemIndex = Math.floor(column / dimension.size) % dimension.count;
+            return dimension.items[itemIndex]
+        })
+    }
+
+    getRowHeader(row) {
+        return this.dimensionLookup.rows.map(dimension => {
+            const itemIndex = Math.floor(row / dimension.size) % dimension.count;
+            return dimension.items[itemIndex]
+        })
     }
 
     buildMatrix() {

@@ -1,6 +1,4 @@
 import React, { useMemo } from 'react'
-import { DataQuery } from '@dhis2/app-runtime'
-import i18n from '@dhis2/d2-i18n'
 import { PivotTable } from './engine'
 import { LookupMap } from './engine/utils/LookupMap'
 
@@ -8,7 +6,7 @@ import data from './testData.json'
 import visualization from './testVisualization.json'
 import times from 'lodash/times'
 
-const invert = true
+const invert = false
 const hideEmptyRows = true;
 const hideEmptyColumns = true;
 
