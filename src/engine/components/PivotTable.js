@@ -1,33 +1,16 @@
-import React, { useState, useRef, useCallback, useEffect, useMemo } from 'react'
-
-import debounce from 'lodash/debounce'
+import React, { useRef, useMemo } from 'react'
 
 import styles from './PivotTable.styles'
 import { LookupMap } from '../utils/LookupMap'
 import { clipAxis } from '../utils/clipAxis'
 import { getHeaderForDisplay } from '../utils/getHeaderForDisplay'
+import { useScrollPosition } from '../utils/useScrollPosition'
 
 export const PivotTable = ({ visualization, data, options }) => {
     const container = useRef(undefined)
-    const [scrollPosition, setScrollPosition] = useState({ x: 0, y: 0 })
+    const scrollPosition = useScrollPosition(container)
 
     const lookup = useMemo(() => new LookupMap(visualization, data, options), [visualization, data, options])
-
-    const onScroll = useCallback(debounce(() => {
-        const scroll = { x: container.current.scrollLeft, y: container.current.scrollTop }
-        setScrollPosition(scroll)
-    }, 10))
-
-    useEffect(() => {
-        if (!container) {
-            return;
-        }
-
-        container.current.addEventListener('scroll', onScroll)
-        return () => {
-            container.current.removeEventListener('scroll', onScroll)
-        }
-    }, [container])
 
     const clippedRows = clipAxis(scrollPosition.y, 600 - lookup.dimensionLookup.rows.length * 25, 25, lookup.height)
     const clippedCols = clipAxis(scrollPosition.x, 1200 - lookup.dimensionLookup.rows.length * 150, 150, lookup.width)
@@ -36,7 +19,7 @@ export const PivotTable = ({ visualization, data, options }) => {
         <style jsx>{styles}</style>
         <table>
             <thead>
-                {lookup.dimensionLookup.columns.map((column, columnLevel) =>
+                {lookup.dimensionLookup.columns.map((_, columnLevel) =>
                     <tr>
                         <th colSpan={lookup.rowDepth} className="empty-header row-header"></th>
                         {clippedCols.pre ?
