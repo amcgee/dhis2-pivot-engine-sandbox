@@ -3,6 +3,20 @@ import times from "lodash/times";
 
 const dataFields = ['value', 'numerator', 'denominator', 'factor', 'multiplier', 'divisor']
 
+const CELL_TYPE_VALUE = 'value'
+const CELL_TYPE_SUBTOTAL = 'subtotal'
+const CELL_TYPE_TOTAL = 'total'
+
+const defaultOptions = {
+    hideEmptyColumns: false,
+    hideEmptyRows: false,
+    showRowTotals: false,
+    showColumnTotals: false,
+    showRowSubtotals: false,
+    showColumnSubtotals: false,
+    aggregateType: 'count'
+}
+
 const countFromDisaggregates = list => {
     if (list.length === 0) {
         return 0;
@@ -126,7 +140,10 @@ export class LookupMap {
     constructor(visualization, data, options = {}) {
         this.visualization = visualization
         this.rawData = data
-        this.options = options
+        this.options = {
+            ...defaultOptions,
+            ...options
+        }
 
         this.dimensionLookup = buildDimensionLookup(this.visualization, this.rawData.metaData, this.rawData.headers)
 
@@ -136,7 +153,8 @@ export class LookupMap {
         this.buildMatrix()
     }
 
-    get({ row, column, field }) {
+    get({ row, column }) {
+        const type = this.getCellType({ row, column })
         const mappedRow = this.rowMap[row],
             mappedColumn = this.columnMap[column]
         if (!mappedRow && mappedRow !== 0 || !mappedColumn && mappedColumn !== 0) {
@@ -144,17 +162,23 @@ export class LookupMap {
         }
         if (this.data[mappedRow]) {
             const dataRow = this.data[mappedRow][mappedColumn]
-            if (!field) {
-                return dataRow
-            } else if (dataRow && this.dimensionLookup.dataHeaders[field]) {
-                return dataRow[this.dimensionLookup.dataHeaders[field]]
+            if (dataRow) {
+                switch (type) {
+                    case CELL_TYPE_VALUE:
+                        const dataValue = dataRow[this.dimensionLookup.dataHeaders['value']]
+                        return dataValue ? dataValue : undefined
+                    default:
+                        //TODO: Different aggregation types (count only works for now)
+                        const totalValue = dataRow.count
+                        return totalValue ? totalValue : undefined
+                }
             }
         }
         return undefined
     }
 
     rowIsEmpty(row) {
-        return this.data[row] && this.data[row].length === 0
+        return !this.data[row] || this.data[row].length === 0
     }
     columnIsEmpty(column) {
         return !this.occupiedColumns[column]
@@ -162,10 +186,10 @@ export class LookupMap {
 
     getColumnHeader(column) {
         column = this.columnMap[column]
-        if (this.options.showColumnTotals && column === this.width - 1) {
+        if (this.options.showRowTotals && column === this.dataWidth - 1) {
             return times(this.dimensionLookup.columns.length - 1, () => undefined).concat([{ name: 'TOTAL' }])
         }
-        if (this.options.showColumnSubtotals) {
+        if (this.options.showRowSubtotals) {
             if ((column + 1) % (this.dimensionLookup.columns[0].size + 1) === 0) {
                 return []
             }
@@ -179,10 +203,10 @@ export class LookupMap {
 
     getRowHeader(row) {
         row = this.rowMap[row]
-        if (this.options.showRowTotals && row === this.height - 1) {
+        if (this.options.showColumnTotals && row === this.dataHeight - 1) {
             return times(this.dimensionLookup.rows.length - 1, () => undefined).concat([{ name: 'TOTAL' }])
         }
-        if (this.options.showRowSubtotals) {
+        if (this.options.showColumnSubtotals) {
             if ((row + 1) % (this.dimensionLookup.rows[0].size + 1) === 0) {
                 return []
             }
@@ -194,24 +218,107 @@ export class LookupMap {
         })
     }
 
+    getDependantTotalCells({ row, column }) {
+        const rowSubtotalSize = this.dimensionLookup.columns[0].size + 1
+        const rowSubtotal = this.options.showRowSubtotals && {
+            row,
+            column: Math.ceil((column + 1) / rowSubtotalSize) * rowSubtotalSize - 1,
+            size: rowSubtotalSize - 1
+        }
+
+        const columnSubtotalSize = this.dimensionLookup.rows[0].size + 1
+        const columnSubtotal = this.options.showColumnSubtotals && {
+            row: Math.ceil((row + 1) / columnSubtotalSize) * columnSubtotalSize - 1,
+            column,
+            size: columnSubtotalSize - 1
+        }
+
+        const rowTotal = this.options.showRowTotals && {
+            row,
+            column: this.dataWidth - 1,
+            size: this.rawDataWidth
+        }
+
+        const columnTotal = this.options.showColumnTotals && {
+            row: this.dataHeight - 1,
+            column,
+            size: this.rawDataHeight
+        }
+        return {
+            rowSubtotal,
+            columnSubtotal,
+            rowTotal,
+            columnTotal
+        }
+    }
+
+    addCellValueToTotals(pos, dataRow) {
+        const totals = this.getDependantTotalCells(pos)
+
+        Object.entries(totals).forEach(([totalType, total]) => {
+            if (!total) return;
+
+            this.data[total.row] = this.data[total.row] || [];
+            this.occupiedColumns[total.column] = true
+
+            this.data[total.row][total.column] = this.data[total.row][total.column] || {
+                count: 0,
+                totalCount: total.size
+            }
+            const totalCell = this.data[total.row][total.column]
+
+            dataFields.forEach(field => {
+                const headerIndex = this.dimensionLookup.dataHeaders[field]
+                // TODO: Fix number parsing, check data type in header
+                const value = Number(dataRow[headerIndex])
+                if (value && !isNaN(value)) {
+                    totalCell[field] += value
+                }
+            })
+            totalCell.count += 1
+        })
+    }
+    finalizeTotals() {
+        // TODO: Different aggregation types?
+    }
+
+    getCellType({ row, column }) {
+        row = this.rowMap[row]
+        column = this.columnMap[column]
+        const isRowTotal = this.options.showRowTotals && row === this.dataHeight - 1
+        const isColumnTotal = this.options.showColumnTotals && column === this.dataWidth - 1
+        if (isRowTotal || isColumnTotal) {
+            return CELL_TYPE_TOTAL
+        }
+
+        const isRowSubtotal = this.options.showRowSubtotals && (row + 1) % (this.dimensionLookup.rows[0].size + 1) === 0
+        const isColumnSubtotal = this.options.showColumnSubtotals && (column + 1) % (this.dimensionLookup.columns[0].size + 1) === 0
+
+        if (isRowSubtotal || isColumnSubtotal) {
+            return CELL_TYPE_SUBTOTAL
+        }
+
+        return CELL_TYPE_VALUE
+    }
+
     buildMatrix() {
         this.data = []
         this.occupiedColumns = []
 
-        let rowCount = countFromDisaggregates(this.dimensionLookup.rows)
-        let columnCount = countFromDisaggregates(this.dimensionLookup.columns)
+        this.dataHeight = this.rawDataHeight = countFromDisaggregates(this.dimensionLookup.rows)
+        this.dataWidth = this.rawDataWidth = countFromDisaggregates(this.dimensionLookup.columns)
 
         if (this.options.showRowSubtotals) {
-            rowCount += this.dimensionLookup.rows[0].count
+            this.dataWidth += this.dimensionLookup.columns[0].count
         }
         if (this.options.showColumnSubtotals) {
-            columnCount += this.dimensionLookup.columns[0].count
+            this.dataHeight += this.dimensionLookup.rows[0].count
         }
         if (this.options.showRowTotals) {
-            rowCount += 1;
+            this.dataWidth += 1;
         }
         if (this.options.showColumnTotals) {
-            columnCount += 1;
+            this.dataHeight += 1;
         }
 
         this.rawData.rows.forEach(dataRow => {
@@ -219,50 +326,18 @@ export class LookupMap {
             this.data[pos.row] = this.data[pos.row] || []
             this.data[pos.row][pos.column] = dataRow
             this.occupiedColumns[pos.column] = true
+
+            this.addCellValueToTotals(pos, dataRow)
         })
 
-        if (this.options.showColumnSubtotals) {
-            times(this.dimensionLookup.rows[0].count, row => {
-                row = (row + 1) * (this.dimensionLookup.rows[0].size + 1) - 1
-                times(columnCount - (this.options.showRowTotals ? 1 : 0), column => {
-                    if (!this.occupiedColumns[column]) return;
-                    this.data[row][column] = times(8, () => <strong>ST</strong>) //TODO: Actually calculate sub-totals
-                })
-            })
-        }
-
-        if (this.options.showRowSubtotals) {
-            times(this.dimensionLookup.columns[0].count, column => {
-                column = (column + 1) * (this.dimensionLookup.columns[0].size + 1) - 1
-                times(rowCount - (this.options.showColumnTotals ? 1 : 0), row => {
-                    if (!this.data[row]) return;
-                    this.data[row][column] = times(8, () => <strong>ST</strong>) //TODO: Actually calculate sub-totals
-                })
-            })
-        }
-
-        if (this.options.showColumnTotals) {
-            this.data[rowCount - 1] = this.data[rowCount - 1] || []
-            times(columnCount, column => {
-                if (!this.occupiedColumns[column]) return;
-                this.data[rowCount - 1][column] = times(8, () => <strong>TOTAL</strong>) //TODO: Actually calculate totals
-            })
-        }
-
-        if (this.options.showRowTotals) {
-            this.occupiedColumns[columnCount - 1] = true
-            times(rowCount, row => {
-                if (!this.data[row]) return;
-                this.data[row][columnCount - 1] = times(8, () => <strong>TOTAL</strong>) //TODO: Actually calculate totals
-            })
-        }
+        this.finalizeTotals()
 
         this.columnMap = this.options.hideEmptyColumns
-            ? times(columnCount, n => n).filter(idx => !!this.occupiedColumns[idx])
-            : times(columnCount, n => n)
+            ? times(this.dataWidth, n => n).filter(idx => !!this.occupiedColumns[idx])
+            : times(this.dataWidth, n => n)
         this.rowMap = this.options.hideEmptyRows
-            ? times(rowCount, n => n).filter(idx => !!this.data[idx])
-            : times(rowCount, n => n)
+            ? times(this.dataHeight, n => n).filter(idx => !!this.data[idx])
+            : times(this.dataHeight, n => n)
 
         this.height = this.rowMap.length;
         this.width = this.columnMap.length;

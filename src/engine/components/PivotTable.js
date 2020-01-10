@@ -5,6 +5,7 @@ import { LookupMap } from '../utils/LookupMap'
 import { clipAxis } from '../utils/clipAxis'
 import { getHeaderForDisplay } from '../utils/getHeaderForDisplay'
 import { useScrollPosition } from '../utils/useScrollPosition'
+import classnames from 'classnames'
 
 export const PivotTable = ({ visualization, data, options }) => {
     const container = useRef(undefined)
@@ -64,7 +65,8 @@ export const PivotTable = ({ visualization, data, options }) => {
                         {
                             clippedCols.indices.map(col => {
                                 const value = lookup.get({ row: index, column: col, field: 'value' })
-                                return <td key={col}>{value || null}</td>
+                                const type = lookup.getCellType({ row: index, column: col })
+                                return <td key={col} className={type}>{value || null}</td>
                             })
                         }
                         {clippedCols.post ? <td /> : null}

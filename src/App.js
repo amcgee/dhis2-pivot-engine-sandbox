@@ -8,11 +8,11 @@ import visualization from './data/emptyRows.visualization.json'
 const invert = false
 const options = {
     hideEmptyRows: true,
-    hideEmptyColumns: false,
-    showColumnSubtotals: false,
-    showRowSubtotals: false,
-    showColumnTotals: false,
-    showRowTotals: false,
+    hideEmptyColumns: true,
+    showColumnSubtotals: true,
+    showRowSubtotals: true,
+    showColumnTotals: true,
+    showRowTotals: true,
 }
 
 if (invert) {
