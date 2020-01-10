@@ -102,7 +102,7 @@ const lookup = (dataRow, dimensionLookup, options) => {
         row += idx * size
     })
 
-    if (options.showRowSubtotals) {
+    if (options.showColumnSubtotals) {
         row += Math.floor(row / dimensionLookup.rows[0].size)
     }
 
@@ -113,7 +113,7 @@ const lookup = (dataRow, dimensionLookup, options) => {
         column += idx * size
     })
 
-    if (options.showColumnSubtotals) {
+    if (options.showRowSubtotals) {
         column += Math.floor(column / dimensionLookup.columns[0].size)
     }
 
@@ -279,20 +279,20 @@ export class LookupMap {
         })
     }
     finalizeTotals() {
-        // TODO: Different aggregation types?
+        // TODO: Calculate averages (and other agg types), compute "intersection" totals/subtotals
     }
 
     getCellType({ row, column }) {
         row = this.rowMap[row]
         column = this.columnMap[column]
-        const isRowTotal = this.options.showRowTotals && row === this.dataHeight - 1
-        const isColumnTotal = this.options.showColumnTotals && column === this.dataWidth - 1
+        const isRowTotal = this.options.showRowTotals && column === this.dataWidth - 1
+        const isColumnTotal = this.options.showColumnTotals && row === this.dataHeight - 1
         if (isRowTotal || isColumnTotal) {
             return CELL_TYPE_TOTAL
         }
 
-        const isRowSubtotal = this.options.showRowSubtotals && (row + 1) % (this.dimensionLookup.rows[0].size + 1) === 0
-        const isColumnSubtotal = this.options.showColumnSubtotals && (column + 1) % (this.dimensionLookup.columns[0].size + 1) === 0
+        const isRowSubtotal = this.options.showRowSubtotals && (column + 1) % (this.dimensionLookup.columns[0].size + 1) === 0
+        const isColumnSubtotal = this.options.showColumnSubtotals && (row + 1) % (this.dimensionLookup.rows[0].size + 1) === 0
 
         if (isRowSubtotal || isColumnSubtotal) {
             return CELL_TYPE_SUBTOTAL
