@@ -11,11 +11,7 @@ export const PivotTable = ({ visualization, data, options }) => {
     const container = useRef(undefined)
     const scrollPosition = useScrollPosition(container)
 
-    const lookup = useMemo(() => {
-        const it = new LookupMap(visualization, data, options)
-        console.log(it)
-        return it
-    }, [visualization, data, options])
+    const lookup = useMemo(() => new LookupMap(visualization, data, options), [visualization, data, options])
 
     const clippedRows = clipAxis(scrollPosition.y, 600, 25, lookup.height)
     const clippedCols = clipAxis(scrollPosition.x, 1200, 150, lookup.width)
