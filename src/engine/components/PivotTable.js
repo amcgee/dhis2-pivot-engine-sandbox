@@ -5,7 +5,6 @@ import { LookupMap } from '../utils/LookupMap'
 import { clipAxis } from '../utils/clipAxis'
 import { getHeaderForDisplay } from '../utils/getHeaderForDisplay'
 import { useScrollPosition } from '../utils/useScrollPosition'
-import classnames from 'classnames'
 
 export const PivotTable = ({ visualization, data, options }) => {
     const container = useRef(undefined)
@@ -13,8 +12,8 @@ export const PivotTable = ({ visualization, data, options }) => {
 
     const lookup = useMemo(() => new LookupMap(visualization, data, options), [visualization, data, options])
 
-    const clippedRows = clipAxis(scrollPosition.y, 600, 25, lookup.height)
-    const clippedCols = clipAxis(scrollPosition.x, 1200, 150, lookup.width)
+    const clippedRows = clipAxis(scrollPosition.y, 600, 25, lookup.height, visualization.columns.length)
+    const clippedCols = clipAxis(scrollPosition.x, 1200, 150, lookup.width, visualization.rows.length)
 
     return <div className="pivot-table-container" ref={container}>
         <style jsx>{styles}</style>
@@ -34,7 +33,7 @@ export const PivotTable = ({ visualization, data, options }) => {
                                 dimensionLevel: columnLevel,
                                 getHeader: idx => lookup.getColumnHeader(idx)
                             })
-                            return !header ? null : <th key={index} className="col-header" colSpan={header.span}>{header.name}</th>
+                            return !header ? null : <th key={index} className={header.name && header.name !== 'TOTAL' ? 'col-header' : 'empty-header'} colSpan={header.span}>{header.name}</th>
                         })}
                         {clippedCols.post ?
                             <th className="col-header" style={{ minWidth: clippedCols.post }} /> : null
@@ -55,7 +54,7 @@ export const PivotTable = ({ visualization, data, options }) => {
                                 dimensionLevel: rowLevel,
                                 getHeader: idx => lookup.getRowHeader(idx)
                             })
-                            return !header ? null : <td key={rowLevel} className="row-header" rowSpan={header.span}>{header.name}</td>
+                            return !header ? null : <td key={rowLevel} className={header.name && header.name !== 'TOTAL'? 'row-header' : 'empty-header'} rowSpan={header.span}>{header.name}</td>
                         })}
                         {clippedCols.pre ? <td /> : null}
                         {

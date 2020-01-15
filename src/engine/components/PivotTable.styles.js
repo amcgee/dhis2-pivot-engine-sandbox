@@ -3,11 +3,12 @@ import css from 'styled-jsx/css'
 export default css`
     div.pivot-table-container {
         position: relative;
-        max-width: 1200px;
-        height: 600px;
+        max-width: 100%;
+        height: 100%;
         overflow: auto;
         border: 1px solid #b2b2b2;
         font-size: 10px;
+        border-collapse: collapse;
     }
     div.pivot-table-container::-webkit-scrollbar {
         -webkit-appearance: none;
@@ -38,12 +39,6 @@ export default css`
     tr:first-child > th {
         border-top: 0;
     }
-    tr:last-child > td {
-        border-bottom: 0;
-    }
-    tr > td:last-child, tr > th:last-child {
-        border-right: 0;
-    }
     td, th {
         padding: 5px;
         border: 1px solid #b2b2b2;
@@ -52,7 +47,6 @@ export default css`
         max-width: 150px;
         min-height: 25px;
         height: 25px;
-        /* max-height: 25px; */
     }
     th {
         font-weight: normal;
